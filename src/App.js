@@ -4,10 +4,11 @@ import React ,{useState} from 'react' ;
 
 
 function App() { 
-  
+  const [inputValue, setInputValue] = useState(0);
+
   const incrementCount = (event) => {
     event.preventDefault();
-    setInputValue(inputValue++);
+    setInputValue(inputValue+1);
   };
 
   const decrementCount = (event) => {
@@ -16,23 +17,21 @@ function App() {
     }
     else{
     event.preventDefault();
-    setInputValue(inputValue--);
+    setInputValue(inputValue-1);
     }
    
   };
 
   const increamentCountByFifty = (event) => {
     event.preventDefault();
-    setInputValue(inputValue=inputValue+50);
+    setInputValue(inputValue+50);
   };
 
   const handleChange=(event)=>{
-    setInputValue(event.target.value);
+    setInputValue(parseInt(event.target.value));
   };
 
   
-  let [inputValue, setInputValue] = useState('');
-  inputValue = parseInt(inputValue);
   
   return (
     <>
