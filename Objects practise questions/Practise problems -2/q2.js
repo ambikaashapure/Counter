@@ -5,7 +5,7 @@ function longestWord(str) {
     // to convert string into array
     const arr = str.split(" ");
 
-    // loop to find the length of the longest word among all the words of string
+    // loop to find the length of the longest word among all the words of array
     for (var i in arr) {
         if (arr[i].length > max) {
             max = arr[i].length
