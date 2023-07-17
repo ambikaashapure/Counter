@@ -1,67 +1,91 @@
 import React, { useState } from 'react';
-import './App.css'
+import './App.css';
+import TodoList from './pages/TodoList';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
- 
+  const [editModeId, setEditModeId] = useState(null);
+  const [editedText, setEditedText] = useState('');
 
   const handleInputChange = event => {
     setNewTodo(event.target.value);
   };
 
+  const handleEditInputChange = event =>{
+    setEditedText(event.target.value);
+  }
+
   const handleAddTodo = () => {
-   if(newTodo){
-    const newTodoItem={
-      id: todos.length+1,
-      text:newTodo
-    };
-    setTodos([...todos,newTodoItem]);
-    setNewTodo('')
-   }
+    if (newTodo) {
+      const newTodoItem = {
+        id: todos.length + 1,
+        text: newTodo,
+        completed: false
+      };
+      setTodos([...todos, newTodoItem]);
+      
+      setNewTodo('');
+    }
   };
 
   const handleDeleteTodo = id => {
-    setTodos(prevtodo => prevtodo.filter(oldtodo => oldtodo.id !=id));
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
   };
 
- 
-
-  const handleCheckboxEvent =id=>{
-    setTodos(prevTodos =>
-      prevTodos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+  const handleToggleTodo = id => {
+    setTodos(prevTodos =>prevTodos.map(todo =>todo.id === id ? { ...todo, completed: !todo.completed } : todo
       )
     );
   };
+
+  const handleEditTodo = id => {
+    const todoToEdit = todos.find(todo => todo.id === id);
+    if (todoToEdit) {
+      setEditModeId(id);
+      setEditedText(todoToEdit.text);
+    }
+  };
+
+  const handleSaveEditTodo = id => {
+    const updatedTodos = todos.map(todo =>
+      todo.id === id ? { ...todo, text: editedText } : todo
+    );
+    setTodos(updatedTodos);
+    setEditModeId(null);
+    setEditedText('');
+  };
+
+  const handleCancelEditTodo = () => {
+    setEditModeId(null);
+    setEditedText('');
+  };
+
   const handleClear = () => {
     setTodos([]);
   };
 
-  return (
-    <div className='app'>
-      <div className='container'>
-        <h2>Tell me what you want to do today?</h2>
-        <div className='container2'>
-          <input className='input_items'
-            type="text" value={newTodo} onChange={handleInputChange} placeholder="Enter new todo item" />
-          <button className='addbtn' onClick={handleAddTodo}>Add Todo</button>
-        
-        <ol>
+  
 
-          {todos.map(todo => (
-            <li >
-              <input type="checkbox" checked={todo.completed}  onChange={()=>handleCheckboxEvent(todo.id)} />{todo.text}
-              <span>{todo.completed ? '     Done' : '    Incomplete'}</span>
-              <button className='deletebtn' onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
-            </li>
-          ))}
-        </ol>
-       
-        <button className='addbtn' onClick={handleClear}>clear</button>
-          </div>
-      </div>
-    </div>
+  return (
+    <>
+      <TodoList
+        todos={todos}
+        newTodo={newTodo}
+        handleInputChange={handleInputChange}
+        handleAddTodo={handleAddTodo}
+        handleDeleteTodo={handleDeleteTodo}
+        handleToggleTodo={handleToggleTodo}
+        handleEditTodo={handleEditTodo}
+        handleSaveEditTodo={handleSaveEditTodo}
+        handleCancelEditTodo={handleCancelEditTodo}
+        editModeId={editModeId}
+        edtiedText={editedText}
+        handleClear={handleClear}
+        handleEditInputChange= {handleEditInputChange}
+       />
+       </>
+ 
   );
 };
 
